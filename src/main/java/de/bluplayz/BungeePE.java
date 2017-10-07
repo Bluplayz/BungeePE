@@ -224,10 +224,6 @@ public class BungeePE extends PluginBase {
             this.getConfig().set( "data.mysql.password", "" );
             edited = true;
         }
-        if ( !this.getConfig().exists( "data.netty.port" ) ) {
-            this.getConfig().set( "data.netty.port", 19132 );
-            edited = true;
-        }
 
         // SERVER
         if ( !this.getConfig().exists( "server" ) ) {
@@ -249,7 +245,7 @@ public class BungeePE extends PluginBase {
         }
 
         // Init some data from config
-        BungeePE.PORT = this.getConfig().getInt( "data.netty.port" );
+        BungeePE.PORT = this.getServer().getPort();
         BungeePE.MAXPLAYERS = this.getConfig().getInt( "maxplayers" );
         BungeePE.MOTD = this.getConfig().getString( "motd" ).replaceAll( "&", "§" );
         BungeePE.LOG_COMMANDS = this.getConfig().getBoolean( "log_commands" );
