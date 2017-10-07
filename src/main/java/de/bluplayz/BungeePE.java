@@ -158,7 +158,7 @@ public class BungeePE extends PluginBase {
             in.close();
 
             if ( !version.equalsIgnoreCase( getDescription().getVersion() ) ) {
-                LocaleAPI.log( "updater_new_version_available", version, updateMessage );
+                LocaleAPI.log( "updater_new_version_available", version, updateMessage, "https://github.com/Bluplayz/BungeePE" );
             } else {
                 LocaleAPI.log( "updater_already_up_to_date" );
             }
@@ -299,7 +299,7 @@ public class BungeePE extends PluginBase {
                 "{PREFIX} §aVersion§7: §b{0} \n" +
                 "{PREFIX} §aUpdates§7: §b{1} \n" +
                 "{PREFIX} \n" +
-                "{PREFIX} §aDen Downloadlink gibt es hier: §bhttps://github.com/Bluplayz/BungeePE" +
+                "{PREFIX} §aDen Downloadlink gibt es hier: §b{2}" +
                 "\n{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §a{0} v{1} wird geladen..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §a{0} v{1} wurde erfolgreich geladen!" );
@@ -334,7 +334,7 @@ public class BungeePE extends PluginBase {
                 "{PREFIX} §aVersion§7: §b{0} \n" +
                 "{PREFIX} §aUpdates§7: §b{1} \n" +
                 "{PREFIX} \n" +
-                "{PREFIX} §aYou can download it here: §bhttps://github.com/Bluplayz/BungeePE" +
+                "{PREFIX} §aYou can download it here: §b{2}" +
                 "\n{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §aLoading {0} v{1}..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §aSuccessfully loaded {0} v{1}!" );
