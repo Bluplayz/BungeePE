@@ -28,10 +28,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BungeePE extends PluginBase {
     public static boolean LOG_COMMANDS = false;
@@ -166,13 +163,13 @@ public class BungeePE extends PluginBase {
             e.printStackTrace();
         }
 
-        if ( getConfig().getBoolean( "autoupdater.activated" ) ) {
+        if ( getConfig().getBoolean( "autoupdater_activated" ) ) {
             new NukkitRunnable() {
                 @Override
                 public void run() {
                     checkForUpdate();
                 }
-            }.runTaskLater( this, getConfig().getInt( "autoupdater.checkForUpdate" ) * 20 );
+            }.runTaskLater( this, getConfig().getInt( "autoupdater_checkForUpdate" ) * 20 );
         }
     }
 
@@ -282,7 +279,7 @@ public class BungeePE extends PluginBase {
      * init locales with default translations
      */
     private void initLocales() {
-        HashMap<String, String> translations = new HashMap<>();
+        LinkedHashMap<String, String> translations = new LinkedHashMap<>();
 
         // Initialize LocaleManager
         this.localeManager = new LocaleManager( getDataFolder() + "/locales" );
@@ -294,13 +291,13 @@ public class BungeePE extends PluginBase {
         translations.put( "prefix", "§7[§3BungeePE§7]§r" );
         translations.put( "updater_check_message", "{PREFIX} §aSuche nach Updates..." );
         translations.put( "updater_already_up_to_date", "{PREFIX} §aDu hast bereits die neuste Version!" );
-        translations.put( "updater_new_version_available", "{PREFIX}\n" +
-                "{PREFIX} §aEine neue Version ist verfuegbar! \n" +
-                "{PREFIX} §aVersion§7: §b{0} \n" +
-                "{PREFIX} §aUpdates§7: §b{1} \n" +
-                "{PREFIX} \n" +
-                "{PREFIX} §aDen Downloadlink gibt es hier: §b{2}" +
-                "\n{PREFIX}" );
+        translations.put( "updater_new_version_available", "{PREFIX} {NEXT_LINE}" +
+                "{PREFIX} §aEine neue Version ist verfuegbar! {NEXT_LINE}" +
+                "{PREFIX} §aVersion§7: §b{0} {NEXT_LINE}" +
+                "{PREFIX} §aUpdates§7: §b{1} {NEXT_LINE}" +
+                "{PREFIX} {NEXT_LINE}" +
+                "{PREFIX} §aDen Downloadlink gibt es hier: §b{2}{NEXT_LINE}" +
+                "{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §a{0} v{1} wird geladen..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §a{0} v{1} wurde erfolgreich geladen!" );
         translations.put( "console_language_set_success", "{PREFIX} §7Die Sprache der Konsole ist §bDeutsch§7." );
@@ -329,13 +326,13 @@ public class BungeePE extends PluginBase {
         translations.put( "prefix", "§7[§3BungeePE§7]§r" );
         translations.put( "updater_check_message", "{PREFIX} §aChecking for update..." );
         translations.put( "updater_already_up_to_date", "{PREFIX} §aYou already have the newest Version!" );
-        translations.put( "updater_new_version_available", "{PREFIX}\n" +
-                "{PREFIX} §aA new Version is Available! \n" +
-                "{PREFIX} §aVersion§7: §b{0} \n" +
-                "{PREFIX} §aUpdates§7: §b{1} \n" +
-                "{PREFIX} \n" +
-                "{PREFIX} §aYou can download it here: §b{2}" +
-                "\n{PREFIX}" );
+        translations.put( "updater_new_version_available", "{PREFIX}{NEXT_LINE}" +
+                "{PREFIX} §aA new Version is Available! {NEXT_LINE}" +
+                "{PREFIX} §aVersion§7: §b{0} {NEXT_LINE}" +
+                "{PREFIX} §aUpdates§7: §b{1} {NEXT_LINE}" +
+                "{PREFIX} {NEXT_LINE}" +
+                "{PREFIX} §aYou can download it here: §b{2}{NEXT_LINE}" +
+                "{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §aLoading {0} v{1}..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §aSuccessfully loaded {0} v{1}!" );
         translations.put( "console_language_set_success", "{PREFIX} §7The Language of the Console is §bEnglish§7." );
