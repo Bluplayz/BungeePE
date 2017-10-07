@@ -21,7 +21,12 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +84,9 @@ public class BungeePE extends PluginBase {
         // Loading start
         LocaleAPI.log( "console_loading_message_start", this.getName(), getDescription().getVersion() );
 
+        // Check for update
+        this.checkForUpdate();
+
         // Initialize DataHandler
         this.initData();
 
@@ -89,7 +97,7 @@ public class BungeePE extends PluginBase {
         this.registerEvents();
 
         // Initialize netty connection
-        initNetwork();
+        this.initNetwork();
 
         // Loading finished
         LocaleAPI.log( "console_loading_message_finish", this.getName(), getDescription().getVersion() );
@@ -111,6 +119,50 @@ public class BungeePE extends PluginBase {
         if ( this.getMySQL() != null ) {
             //getMySQL().disconnect();
         }
+    }
+
+    /**
+     * check for update
+     */
+    private void checkForUpdate() {
+        try {
+            String version = "error";
+            String updateMessage = "update message was not found";
+
+            URL url = new URL( "https://raw.githubusercontent.com/Bluplayz/" + getClass().getSimpleName() + "/master/src/main/resources/plugin.yml" );
+            URLConnection connection = url.openConnection();
+
+            BufferedReader in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+            String line;
+            while ( ( line = in.readLine() ) != null ) {
+                if ( line.startsWith( "version: " ) ) {
+                    version = line.substring( 9 );
+                    break;
+                }
+            }
+
+            in.close();
+
+            url = new URL( "https://raw.githubusercontent.com/Bluplayz/" + getClass().getSimpleName() + "/master/UpdateNotes.yml" );
+            connection = url.openConnection();
+
+            in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+            while ( ( line = in.readLine() ) != null ) {
+                if ( line.startsWith( version + ": " ) ) {
+                    updateMessage = line.substring( version.length() + 2 );
+                    break;
+                }
+            }
+
+            in.close();
+
+            if ( !version.equalsIgnoreCase( getDescription().getVersion() ) ) {
+                LocaleAPI.log( "updater_new_version_available", version, updateMessage );
+            }
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+        //TODO
     }
 
     /**
@@ -226,6 +278,13 @@ public class BungeePE extends PluginBase {
 
         translations.clear();
         translations.put( "prefix", "§7[§3BungeePE§7]§r" );
+        translations.put( "updater_new_version_available", "{PREFIX}\n" +
+                "{PREFIX} §aEine neue Version ist verfuegbar! \n" +
+                "{PREFIX} §aVersion§7: §b{0} \n" +
+                "{PREFIX} §aUpdates§7: §b{1} \n" +
+                "{PREFIX} \n" +
+                "{PREFIX} §aDen Downloadlink gibt es hier: §bhttps://github.com/Bluplayz/BungeePE" +
+                "\n{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §a{0} v{1} wird geladen..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §a{0} v{1} wurde erfolgreich geladen!" );
         translations.put( "console_language_set_success", "{PREFIX} §7Die Sprache der Konsole ist §bDeutsch§7." );
@@ -308,8 +367,8 @@ public class BungeePE extends PluginBase {
 
                     PEServer peServer = PEServer.getServerByName( verifyPacket.getServername() );
                     if ( peServer == null ) {
-                        getServer().getLogger().info( "Server with the name " + verifyPacket.getServername() + " was not found!" );
-                        getServer().getLogger().info( "Available Servers: " + PEServer.servers.toString() );
+                        //getServer().getLogger().info( "Server with the name " + verifyPacket.getServername() + " was not found!" );
+                        //getServer().getLogger().info( "Available Servers: " + PEServer.servers.toString() );
 
                         verifyPacket.setSuccess( false );
                         sendPacket( packet, channel );
@@ -324,7 +383,7 @@ public class BungeePE extends PluginBase {
                         address2 = InetAddress.getByName( peServer.getHost() );
 
                         if ( address1 != address2 ) {
-                            getServer().getLogger().info( "Server with the host address " + address1 + " doesnt match with " + address2 + "!" );
+                            //getServer().getLogger().info( "Server with the host address " + address1 + " doesnt match with " + address2 + "!" );
 
                             verifyPacket.setSuccess( false );
                             sendPacket( packet, channel );
@@ -336,7 +395,7 @@ public class BungeePE extends PluginBase {
                     }
 
                     if ( peServer.getPort() != verifyPacket.getPort() ) {
-                        getServer().getLogger().info( "Server with the port " + verifyPacket.getPort() + " doesnt match with " + peServer.getPort() + "!" );
+                        //getServer().getLogger().info( "Server with the port " + verifyPacket.getPort() + " doesnt match with " + peServer.getPort() + "!" );
 
                         verifyPacket.setSuccess( false );
                         sendPacket( packet, channel );
