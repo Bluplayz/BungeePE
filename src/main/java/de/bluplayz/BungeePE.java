@@ -130,7 +130,7 @@ public class BungeePE extends PluginBase {
             String version = "error";
             String updateMessage = "update message was not found";
 
-            URL url = new URL( "https://raw.githubusercontent.com/Bluplayz/" + getClass().getSimpleName() + "/master/src/main/resources/plugin.yml" );
+            URL url = new URL( "https://raw.githubusercontent.com/Bluplayz/BungeePE/master/src/main/resources/plugin.yml" );
             URLConnection connection = url.openConnection();
 
             BufferedReader in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
@@ -144,7 +144,7 @@ public class BungeePE extends PluginBase {
 
             in.close();
 
-            url = new URL( "https://raw.githubusercontent.com/Bluplayz/" + getClass().getSimpleName() + "/master/UpdateNotes.yml" );
+            url = new URL( "https://raw.githubusercontent.com/Bluplayz/BungeePE/master/UpdateNotes.yml" );
             connection = url.openConnection();
 
             in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
