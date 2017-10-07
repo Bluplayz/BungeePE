@@ -9,7 +9,7 @@ public class LocaleAPI {
 
     public static void log( String key, Object... args ) {
         String translatedMessage = translate( BungeePE.getInstance().getConsoleLocale(), key, args );
-        for ( String line : translatedMessage.split( "\n" ) ) {
+        for ( String line : translatedMessage.split( "\\{NEXT_LINE}" ) ) {
             BungeePE.getInstance().getServer().getLogger().info( line );
         }
     }
