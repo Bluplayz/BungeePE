@@ -126,6 +126,7 @@ public class BungeePE extends PluginBase {
      */
     private void checkForUpdate() {
         try {
+            LocaleAPI.log( "updater_check_message" );
             String version = "error";
             String updateMessage = "update message was not found";
 
@@ -158,11 +159,21 @@ public class BungeePE extends PluginBase {
 
             if ( !version.equalsIgnoreCase( getDescription().getVersion() ) ) {
                 LocaleAPI.log( "updater_new_version_available", version, updateMessage );
+            } else {
+                LocaleAPI.log( "updater_already_up_to_date" );
             }
         } catch ( IOException e ) {
             e.printStackTrace();
         }
-        //TODO
+
+        if ( getConfig().getBoolean( "autoupdater.activated" ) ) {
+            new NukkitRunnable() {
+                @Override
+                public void run() {
+                    checkForUpdate();
+                }
+            }.runTaskLater( this, getConfig().getInt( "autoupdater.checkForUpdate" ) * 20 );
+        }
     }
 
     /**
@@ -194,6 +205,13 @@ public class BungeePE extends PluginBase {
         }
         if ( !this.getConfig().exists( "language.fallback" ) ) {
             this.getConfig().set( "language.fallback", "en_EN" );
+            edited = true;
+        }
+
+        // UPDATER
+        if ( !this.getConfig().exists( "autoupdater" ) ) {
+            this.getConfig().set( "autoupdater.activated", true );
+            this.getConfig().set( "autoupdater.checkForUpdate", 30 * 60 );
             edited = true;
         }
 
@@ -278,6 +296,8 @@ public class BungeePE extends PluginBase {
 
         translations.clear();
         translations.put( "prefix", "§7[§3BungeePE§7]§r" );
+        translations.put( "updater_check_message", "{PREFIX} §aSuche nach Updates..." );
+        translations.put( "updater_already_up_to_date", "{PREFIX} §aDu hast bereits die neuste Version!" );
         translations.put( "updater_new_version_available", "{PREFIX}\n" +
                 "{PREFIX} §aEine neue Version ist verfuegbar! \n" +
                 "{PREFIX} §aVersion§7: §b{0} \n" +
@@ -311,6 +331,15 @@ public class BungeePE extends PluginBase {
 
         translations.clear();
         translations.put( "prefix", "§7[§3BungeePE§7]§r" );
+        translations.put( "updater_check_message", "{PREFIX} §aChecking for update..." );
+        translations.put( "updater_already_up_to_date", "{PREFIX} §aYou already have the newest Version!" );
+        translations.put( "updater_new_version_available", "{PREFIX}\n" +
+                "{PREFIX} §aA new Version is Available! \n" +
+                "{PREFIX} §aVersion§7: §b{0} \n" +
+                "{PREFIX} §aUpdates§7: §b{1} \n" +
+                "{PREFIX} \n" +
+                "{PREFIX} §aYou can download it here: §bhttps://github.com/Bluplayz/BungeePE" +
+                "\n{PREFIX}" );
         translations.put( "console_loading_message_start", "{PREFIX} §aLoading {0} v{1}..." );
         translations.put( "console_loading_message_finish", "{PREFIX} §aSuccessfully loaded {0} v{1}!" );
         translations.put( "console_language_set_success", "{PREFIX} §7The Language of the Console is §bEnglish§7." );
