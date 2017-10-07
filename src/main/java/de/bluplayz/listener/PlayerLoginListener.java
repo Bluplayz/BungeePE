@@ -27,6 +27,15 @@ public class PlayerLoginListener extends SimpleListener {
                 continue;
             }
 
+            if ( !server.isOnline() ) {
+                continue;
+            }
+
+            if ( server.getPermission().equalsIgnoreCase( "" ) ) {
+                targetServer = server;
+                break;
+            }
+
             if ( server.isOnline() && player.hasPermission( server.getPermission() ) ) {
                 targetServer = server;
                 break;
