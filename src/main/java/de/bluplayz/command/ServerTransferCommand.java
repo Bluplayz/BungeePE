@@ -4,11 +4,9 @@ import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import de.bluplayz.BungeePE;
-import de.bluplayz.Callback;
 import de.bluplayz.api.LocaleAPI;
 import de.bluplayz.data.PEServer;
 import de.bluplayz.network.packet.PlayerTransferPacket;
-import de.bluplayz.networkhandler.netty.NettyHandler;
 import lombok.Getter;
 
 public class ServerTransferCommand extends Command {
@@ -40,24 +38,17 @@ public class ServerTransferCommand extends Command {
             return false;
         }
 
-        PlayerTransferPacket playerTransferPacket = new PlayerTransferPacket();
-        playerTransferPacket.setPlayername( targetname );
-        playerTransferPacket.setHost( targetServer.getHost() );
-        playerTransferPacket.setPort( targetServer.getPort() );
+        if ( !this.getPlugin().playerOnline( targetname ) ) {
+            LocaleAPI.sendTranslatedMessage( sender, "network_player_not_found", targetname );
+        } else {
+            PlayerTransferPacket playerTransferPacket = new PlayerTransferPacket();
+            playerTransferPacket.setPlayername( targetname );
+            playerTransferPacket.setHost( targetServer.getHost() );
+            playerTransferPacket.setPort( targetServer.getPort() );
 
-        getPlugin().getNettyHandler().addPacketCallback( playerTransferPacket, new Callback() {
-            @Override
-            public void accept( Object... objects ) {
-                PlayerTransferPacket packet = (PlayerTransferPacket) objects[0];
-                if ( !packet.isSuccess() ) {
-                    LocaleAPI.sendTranslatedMessage( sender, "network_player_not_found", targetname );
-                } else {
-                    //TODO success message
-                }
-            }
-        } );
-
-        getPlugin().getPacketHandler().sendPacket( playerTransferPacket, NettyHandler.getClients().get( "Lobby-1" ) );
+            this.getPlugin().getPacketHandler().sendPacket( playerTransferPacket );
+            LocaleAPI.sendTranslatedMessage( sender, "network_server_player_moved", this.getPlugin().getPlayername( targetname ), targetServer.getName() );
+        }
         return true;
     }
 }

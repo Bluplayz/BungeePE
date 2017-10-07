@@ -129,6 +129,7 @@ public class BungeePE extends PluginBase {
 
             URL url = new URL( "https://raw.githubusercontent.com/Bluplayz/BungeePE/master/src/main/resources/plugin.yml" );
             URLConnection connection = url.openConnection();
+            connection.setUseCaches( false );
 
             BufferedReader in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
             String line;
@@ -143,6 +144,7 @@ public class BungeePE extends PluginBase {
 
             url = new URL( "https://raw.githubusercontent.com/Bluplayz/BungeePE/master/UpdateNotes.yml" );
             connection = url.openConnection();
+            connection.setUseCaches( false );
 
             in = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
             while ( ( line = in.readLine() ) != null ) {
@@ -312,6 +314,7 @@ public class BungeePE extends PluginBase {
         translations.put( "network_player_switch_server", "{PREFIX} §aDer Spieler §b{0} §aging von Server §b{1} §azu Server §b{2}" );
         translations.put( "network_player_connect", "{PREFIX} §aDer Spieler §b{0} §ahat den Server §b{1} §abetreten" );
         translations.put( "network_player_disconnect", "{PREFIX} §aDer Spieler §b{0} §ahat den Server §b{1} §averlassen" );
+        translations.put( "network_server_player_moved", "{PREFIX} §aDer Spieler §b{0} §awird nun auf den Server §b{1} §agemoved" );
         translations.put( "command_no_permissions", "{PREFIX} §cDu hast keine Berechtigung diesen Command auszuführen!" );
         translations.put( "command_servers_online_servers", "{PREFIX} §3Online Server:" );
         translations.put( "command_server_usage", "{PREFIX} §eBenutzung: /server <spieler> <servername>" );
@@ -347,6 +350,7 @@ public class BungeePE extends PluginBase {
         translations.put( "network_player_switch_server", "{PREFIX} §aThe Player §b{0} §amoved from Server §b{1} §ato Server §b{2}" );
         translations.put( "network_player_connect", "{PREFIX} §aThe Player §b{0} §ahas entered the Server §b{1}" );
         translations.put( "network_player_disconnect", "{PREFIX} §aThe Player §b{0} §ahas leaved the Server §b{1}" );
+        translations.put( "network_server_player_moved", "{PREFIX} §aThe Player §b{0} §awill be moved to the Server §b{1}" );
         translations.put( "command_no_permissions", "{PREFIX} §cYou don't have the permission to perform this command!" );
         translations.put( "command_servers_online_servers", "{PREFIX} §3Online Servers:" );
         translations.put( "command_server_usage", "{PREFIX} §eUsage: /server <player> <servername>" );
@@ -465,7 +469,10 @@ public class BungeePE extends PluginBase {
                         return;
                     }
 
-                    // Nothing yet
+                    if ( !peServer.getPlayers().containsAll( peServerDataPacket.getPlayers() ) ) {
+                        peServer.getPlayers().clear();
+                        peServer.setPlayers( peServerDataPacket.getPlayers() );
+                    }
                 }
 
                 if ( packet instanceof PlayerConnectPacket ) {
@@ -583,5 +590,31 @@ public class BungeePE extends PluginBase {
             PEServer.serverJoinPriority.put( i, PEServer.getServerByName( servername2 ) );
             i++;
         }
+    }
+
+    public boolean playerOnline( String playername ) {
+        return getPlayername( playername ) != null;
+    }
+
+    public String getPlayername( String shortname ) {
+        String found = null;
+        shortname = shortname.toLowerCase();
+        int delta = Integer.MAX_VALUE;
+        for ( PEServer server : PEServer.servers ) {
+            for ( String name : server.getPlayers() ) {
+                if ( name.toLowerCase().startsWith( shortname ) ) {
+                    int curDelta = name.length() - shortname.length();
+                    if ( curDelta < delta ) {
+                        found = name;
+                        delta = curDelta;
+                    }
+                    if ( curDelta == 0 ) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return found;
     }
 }
