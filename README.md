@@ -1,6 +1,6 @@
 # BungeePE
 - BungeeAPI: https://github.com/Bluplayz/BungeeAPI
-- Download jar: https://bit.ly/BungeePE
+- Download jar: https://www.dropbox.com/s/deceh8zdfnl5vcv/BungeePE.jar?dl=0
 
 ## German
 
