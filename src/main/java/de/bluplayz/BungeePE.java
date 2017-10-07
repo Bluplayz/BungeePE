@@ -117,8 +117,66 @@ public class BungeePE extends PluginBase {
      * init config files
      */
     private void initConfig() {
-        // Save default config
-        this.saveDefaultConfig();
+        this.getConfig().reload();
+
+        boolean edited = false;
+
+        // GLOBAL
+        if ( !this.getConfig().exists( "maxplayers" ) ) {
+            this.getConfig().set( "maxplayers", 200 );
+            edited = true;
+        }
+        if ( !this.getConfig().exists( "log_commands" ) ) {
+            this.getConfig().set( "log_commands", true );
+            edited = true;
+        }
+        if ( !this.getConfig().exists( "motd" ) ) {
+            this.getConfig().set( "motd", "&cProxy made by &bBluplayz! :)" );
+            edited = true;
+        }
+
+        // LANGUAGE
+        if ( !this.getConfig().exists( "language.console" ) ) {
+            this.getConfig().set( "language.console", "de_DE" );
+            edited = true;
+        }
+        if ( !this.getConfig().exists( "language.fallback" ) ) {
+            this.getConfig().set( "language.fallback", "en_EN" );
+            edited = true;
+        }
+
+        // DATA
+        if ( !this.getConfig().exists( "data.mysql" ) ) {
+            this.getConfig().set( "data.mysql.host", "localhost" );
+            this.getConfig().set( "data.mysql.port", 3306 );
+            this.getConfig().set( "data.mysql.username", "root" );
+            this.getConfig().set( "data.mysql.database", "bungeepe" );
+            this.getConfig().set( "data.mysql.password", "" );
+            edited = true;
+        }
+        if ( !this.getConfig().exists( "data.netty.port" ) ) {
+            this.getConfig().set( "data.netty.port", 19132 );
+            edited = true;
+        }
+
+        // SERVER
+        if ( !this.getConfig().exists( "server" ) ) {
+            this.getConfig().set( "server.options.priorities", new String[]{ "SilentLobby-1", "Lobby-1" } );
+            this.getConfig().set( "server.Lobby-1.address", "localhost:19133" );
+            this.getConfig().set( "server.Lobby-1.permission", "" );
+            this.getConfig().set( "server.SilentLobby-1.address", "localhost:19140" );
+            this.getConfig().set( "server.SilentLobby-1.permission", "bungeepe.silentlobby" );
+            edited = true;
+        }
+        if ( !this.getConfig().exists( "server.options.priorities" ) ) {
+            this.getConfig().set( "server.options.priorities", new String[]{ "SilentLobby-1", "Lobby-1" } );
+            edited = true;
+        }
+
+        if ( edited ) {
+            this.getConfig().save();
+            this.getConfig().reload();
+        }
 
         // Init some data from config
         BungeePE.PORT = this.getConfig().getInt( "data.netty.port" );

@@ -1,6 +1,6 @@
 name: BungeePE
 main: de.bluplayz.BungeePE
-version: 1.0.4
+version: 1.0.0
 author: Bluplayz
 api: 1.0.0
 commands:
