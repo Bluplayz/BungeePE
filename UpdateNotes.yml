@@ -2,4 +2,5 @@
 1.0.2: Locale Bug fixed
 1.0.3: Fix ServerTransfer Command and reconnect bug
 1.0.4: add automaticly download in updater
-1.0.5: -
+1.0.5: fix some bugs
+1.0.6: -
