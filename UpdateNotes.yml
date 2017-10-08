@@ -1,4 +1,5 @@
 1.0.1: Server Priority Bug fixed
 1.0.2: Locale Bug fixed
 1.0.3: Fix ServerTransfer Command and reconnect bug
-1.0.4: -
+1.0.4: add automaticly download in updater
+1.0.5: -
