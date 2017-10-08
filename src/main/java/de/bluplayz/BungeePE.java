@@ -199,7 +199,6 @@ public class BungeePE extends PluginBase {
      */
     private void initConfig() {
         this.getConfig().reload();
-
         boolean edited = false;
 
         // GLOBAL
