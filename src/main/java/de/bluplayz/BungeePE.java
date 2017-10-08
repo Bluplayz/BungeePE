@@ -172,7 +172,6 @@ public class BungeePE extends PluginBase {
 
             if ( !version.equalsIgnoreCase( getDescription().getVersion() ) ) {
                 LocaleAPI.log( "updater_new_version_available", version, updateMessage, "https://github.com/Bluplayz/BungeePE" );
-                getServer().getLogger().info( "§bDownload update..." );
                 LocaleAPI.log( "updater_update_started" );
                 File downloadFile = new File( getServer().getDataPath() + "/plugins/download_BungeePE.jar" );
                 FileUtils.copyURLToFile( new URL( "https://github.com/Bluplayz/BungeePE/raw/master/out/BungeePE.jar" ), downloadFile );
